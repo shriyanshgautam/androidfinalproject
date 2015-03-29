@@ -79,7 +79,7 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
 
             final String FORECAST_BASE_URL =
                     "http://foodbasket.innovaders.in/food.php?";
-            Log.d("Sync URL",FORECAST_BASE_URL);
+
             final String QUERY_PARAM = "q";
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
@@ -87,7 +87,7 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
                    .build();
 
             URL url = new URL(builtUri.toString());
-
+            Log.d("Sync URL",builtUri.toString());
             // Create the request to server, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

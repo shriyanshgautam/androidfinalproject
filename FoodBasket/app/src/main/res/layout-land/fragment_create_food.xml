@@ -43,7 +43,7 @@
                     android:layout_height="0dp"
                     android:gravity="center"
                     android:textSize="23dp"
-                    android:hint="Name"
+                    android:hint="Name*"
 
                     android:maxLines="2"
                     android:capitalize="words"
@@ -171,14 +171,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:hint="Serves"/>
+                    android:hint="Serves*"/>
 
 
 
                 <EditText
                     android:id="@+id/createbaseprice"
                     android:layout_width="match_parent"
-                    android:hint="Base Price"
+                    android:hint="Base Price*"
                     android:inputType="numberDecimal"
                     android:layout_height="wrap_content" />
                 <EditText
@@ -198,7 +198,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:hint="Time to prepare"
+                    android:hint="Time to prepare*"
                     />
 
 
