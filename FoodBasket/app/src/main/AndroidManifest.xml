@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.shriyansh.foodbasket" >
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name=".data.FoodProvider"
+            android:authorities="@string/content_authority"
+            android:exported="false"
+            android:syncable="true" />
+
+        <activity
+            android:name=".FoodActivity"
+            android:label="@string/title_activity_food"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FoodActivity" />
+        </activity>
+        <activity
+            android:name=".OrderDetailActivity"
+            android:label="@string/title_activity_order_detail"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FoodActivity" />
+        </activity>
+        <activity
+            android:name=".FoodDetailActivity"
+            android:label="@string/title_activity_food_detail"
+            android:parentActivityName=".FoodActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.shriyansh.foodbasket.FoodActivity" />
+        </activity>
+        <activity
+            android:name=".CreateFoodActivity"
+            android:label="@string/title_activity_create_food"
+            android:parentActivityName=".FoodActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.shriyansh.foodbasket.MainActivity" />
+        </activity>
+        <activity
+            android:name=".CreateOrderActivity"
+            android:label="@string/title_activity_create_order"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.shriyansh.foodbasket.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SelectFoodActivity"
+            android:label="@string/title_activity_select_food"
+            >
+
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.shriyansh.foodbasket.MainActivity" />
+        </activity>
+    </application>
+
+</manifest>

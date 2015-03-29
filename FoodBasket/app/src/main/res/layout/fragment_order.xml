@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="0dp"
+       tools:context="com.shriyansh.foodbasket.FoodActivity$PlaceholderFragment">
+
+    <ListView
+        android:id="@+id/list_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+    <ImageView
+        android:id="@+id/takeorder"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_action_edit"
+        android:padding="12dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/circular_shape_voilet"/>
+
+</RelativeLayout>

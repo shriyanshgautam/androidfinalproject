@@ -1,0 +1,173 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.shriyansh.foodbasket.OrderDetailActivity$PlaceholderFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/grey"
+        android:orientation="vertical"
+        android:layout_height="170dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="0.8">
+            <TextView
+                android:id="@+id/ordrtime"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textStyle="bold"
+                android:text="12:45 PM"
+                android:textSize="16dp"
+                android:paddingLeft="10dp"
+                android:textColor="@color/white"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="#"
+
+                android:textColor="@color/white"
+                android:gravity="right|center_vertical"
+                android:textSize="35dp"/>
+            <TextView
+                android:id="@+id/tablenumber"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:textSize="37dp"
+                android:textStyle="bold"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:text="99"
+                android:paddingRight="10dp"
+                android:gravity="center_vertical|left"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingRight="10dp"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/customerimage"
+                android:layout_width="80dp"
+                android:src="@drawable/ic_launcher"
+                android:padding="2dp"
+                android:background="@color/light_grey"
+                android:layout_height="80dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/customername"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:textSize="30dp"
+                    android:textColor="@color/white"
+                    android:text="Shriyansh Gautam"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/white"/>
+                <TextView
+                    android:id="@+id/comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.9"
+                    android:gravity="center_vertical"
+                    android:textSize="12dp"
+                    android:textStyle="italic"
+                    android:paddingBottom="4dp"
+                    android:text="\@ these are the comments  that user has written o describe "
+                    android:textColor="@color/white"
+                    />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+    </LinearLayout>
+    <ListView
+        android:id="@+id/order_food_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </ListView>
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+
+            android:background="@color/grey"
+            >
+        <ImageView
+            android:layout_marginLeft="2dp"
+
+            android:layout_width="42dp"
+            android:padding="4dp"
+            android:background="@color/grey"
+            android:layout_height="42dp" />
+        <ImageView
+            android:layout_marginLeft="2dp"
+
+            android:layout_width="42dp"
+            android:padding="2dp"
+            android:background="@color/grey"
+            android:layout_height="42dp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:gravity="center_vertical|right"
+            android:textSize="15dp"
+            android:textStyle="bold"
+
+            android:text="Total Amount\n(inclusive of teaxes)"/>
+
+            <TextView
+                android:id="@+id/totalprice"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:textColor="@color/white"
+
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:gravity="right|center_vertical"
+                android:textSize="32dp"
+
+                android:text="Rs 200"/>
+
+
+        </LinearLayout>
+
+</LinearLayout>

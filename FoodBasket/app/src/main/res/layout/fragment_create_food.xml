@@ -1,0 +1,213 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.shriyansh.foodbasket.CreateFoodActivity$PlaceholderFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:orientation="horizontal"
+
+        android:background="@color/grey">
+       <LinearLayout
+           android:layout_width="110dp"
+           android:layout_height="110dp"
+           android:gravity="center">
+           <ImageView
+               android:src="@drawable/ic_action_picture"
+               android:id="@+id/foodimage"
+               android:layout_width="88dp"
+               android:layout_height="88dp"
+               android:padding="2dp"
+               android:background="@color/light_grey"/>
+
+       </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/createname"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="center_vertical"
+                android:textSize="25dp"
+                android:hint="Name"
+                android:maxLines="2"
+                android:capitalize="words"
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"
+                android:layout_weight="1"/>
+            <EditText
+                android:id="@+id/createdesc"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="bottom"
+                android:textSize="12dp"
+                android:maxLines="1"
+                android:capitalize="words"
+                android:hint="Short description"
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"
+                android:layout_weight="0.4"/>
+
+        </LinearLayout>
+
+     </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal">
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+
+                android:text="Availability"/>
+
+            <Switch
+                android:id="@+id/createavailable"
+                android:layout_marginLeft="50dp"
+                android:textOn="Available"
+                android:textOff="Unavailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                 />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+
+                android:text="Vegetarian"/>
+
+            <Switch
+                android:id="@+id/createveg"
+                android:layout_marginLeft="50dp"
+                android:textOn="VEG"
+                android:textOff="NON VEG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+
+                android:text="Category"/>
+            <Spinner
+                android:id="@+id/spinnerCategory"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="50dp"
+                android:layout_height="35dp">
+
+            </Spinner>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+
+                android:text="Spiciness"/>
+            <Spinner
+                android:id="@+id/spinnerSpiciness"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="50dp"
+                android:layout_height="35dp">
+
+            </Spinner>
+
+
+        </LinearLayout>
+
+
+
+
+
+        <EditText
+            android:id="@+id/createserves"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="Serves"/>
+
+
+
+        <EditText
+            android:id="@+id/createbaseprice"
+            android:layout_width="match_parent"
+            android:hint="Base Price"
+            android:inputType="numberDecimal"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/createmainingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Main Ingredients"
+            android:minLines="2"/>
+        <EditText
+            android:id="@+id/createcomments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Comments"
+           />
+        <EditText
+            android:id="@+id/createtime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Time to prepare"
+            />
+
+
+        </LinearLayout>
+    </ScrollView>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="45dp"
+           android:gravity="center"
+           android:background="@color/grey">
+           <TextView
+               android:id="@+id/tvaddbutton"
+               android:layout_width="match_parent"
+               android:textColor="@color/white"
+               android:gravity="center"
+               android:textSize="35dp"
+
+               android:text="+"
+
+               android:layout_height="wrap_content" />
+
+           </LinearLayout>
+
+</LinearLayout>
