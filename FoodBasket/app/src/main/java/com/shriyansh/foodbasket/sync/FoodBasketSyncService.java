@@ -15,7 +15,7 @@ public class FoodBasketSyncService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d("FoodBasketSyncService", "onCreate - SunshineSyncService");
+        Log.d("FoodBasketSyncService", "onCreate - FoodBasketSyncService");
         synchronized (sSyncAdapterLock) {
             if (foodBasketSyncAdapter == null) {
                 foodBasketSyncAdapter = new FoodBasketSyncAdapter(getApplicationContext(), true);

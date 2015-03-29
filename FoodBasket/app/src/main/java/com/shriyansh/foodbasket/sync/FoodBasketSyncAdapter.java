@@ -46,9 +46,9 @@ import java.util.Vector;
 public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public final String LOG_TAG = FoodBasketSyncAdapter.class.getSimpleName();
-    // Interval at which to sync with the weather, in seconds.
-    // 60 seconds (1 minute) * 180 = 3 hours
-    public static final int SYNC_INTERVAL = 60 * 1;
+
+    // 60 seconds (1 minute) * 60 = 1 hour
+    public static final int SYNC_INTERVAL = 60 * 5;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
     private static final int WEATHER_NOTIFICATION_ID = 3004;
     public static final String CURRENT_FOOD_VERSION="current_food_version";
@@ -75,31 +75,20 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
         // Will contain the raw JSON response as a string.
         String foodJsonStr = null;
 
-//        String format = "json";
-//        String units = "metric";
-//        int numDays = 14;
-
         try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
+
             final String FORECAST_BASE_URL =
                     "http://foodbasket.innovaders.in/food.php?";
+            Log.d("Sync URL",FORECAST_BASE_URL);
             final String QUERY_PARAM = "q";
-//            final String FORMAT_PARAM = "mode";
-//            final String UNITS_PARAM = "units";
-//            final String DAYS_PARAM = "cnt";
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM, String.valueOf(version))
-//                    .appendQueryParameter(FORMAT_PARAM, format)
-//                    .appendQueryParameter(UNITS_PARAM, units)
-//                    .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
-                    .build();
+                   .appendQueryParameter(QUERY_PARAM, String.valueOf(version))
+                   .build();
 
             URL url = new URL(builtUri.toString());
 
-            // Create the request to OpenWeatherMap, and open the connection
+            // Create the request to server, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -127,6 +116,7 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             foodJsonStr = buffer.toString();
             getFoodDataFromJson(foodJsonStr);
+            Log.e(LOG_TAG,foodJsonStr);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
@@ -164,13 +154,7 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
                                         )
             throws JSONException {
 
-        // Now we have a String representing the complete forecast in JSON Format.
-        // Fortunately parsing is easy:  constructor takes the JSON string and converts it
-        // into an Object hierarchy for us.
-
-
-
-        // Location information
+        // Food Keys
         final String FOOD_ITEMS="food_items";
         final String FOOD_NAME = "name";
         final String FOOD_DESC = "description";
@@ -187,6 +171,7 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
         final String FOOD_VERSION="food_version";
 
         String snames="New Food items : ";
+        int count=0;
 
         try {
             JSONObject foodJson = new JSONObject(forecastJsonStr);
@@ -195,35 +180,10 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
             editor=myprefs.edit();
             editor.putInt(CURRENT_FOOD_VERSION,newVersion);
             editor.commit();
-//
-//            JSONObject cityJson = forecastJson.getJSONObject(OWM_CITY);
-//            String cityName = cityJson.getString(OWM_CITY_NAME);
-//
-//            JSONObject cityCoord = cityJson.getJSONObject(OWM_COORD);
-//            double cityLatitude = cityCoord.getDouble(OWM_LATITUDE);
-//            double cityLongitude = cityCoord.getDouble(OWM_LONGITUDE);
 
-            //long locationId = addLocation(locationSetting, cityName, cityLatitude, cityLongitude);
-
-            // Insert the new weather information into the database
+            // Insert the new food information into the database
             Vector<ContentValues> cVVector = new Vector<ContentValues>(foodArray.length());
 
-            // OWM returns daily forecasts based upon the local time of the city that is being
-            // asked for, which means that we need to know the GMT offset to translate this data
-            // properly.
-
-            // Since this data is also sent in-order and the first day is always the
-            // current day, we're going to take advantage of that to get a nice
-            // normalized UTC date for all of our weather.
-
-//            Time dayTime = new Time();
-//            dayTime.setToNow();
-//
-//            // we start at the day returned by local time. Otherwise this is a mess.
-//            int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
-//
-//            // now we work exclusively in UTC
-//            dayTime = new Time();
 
             for (int i = 0; i < foodArray.length(); i++) {
                 // These are the values that will be collected.
@@ -231,54 +191,25 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
                 String sname, sdesc, scategory = "0", sspiciness = "0", sserves, sbaseprice, smainingredients, scomments, stime, simgurl;
                 int sveg, savailable;
 
-//            long dateTime;
-//                double pressure;
-//                int humidity;
-//                double windSpeed;
-//                double windDirection;
-//
-//                double high;
-//                double low;
-//
-//                String description;
-//                int weatherId;
 
-                // Get the JSON object representing the day
+                //JSON Object of single food item
                 JSONObject foodItem = foodArray.getJSONObject(i);
 
-                // Cheating to convert this to UTC time, which is what we want anyhow
                 sname = foodItem.getString(FOOD_NAME);
                 snames+=sname+" ";
+                count++;
                 sdesc = foodItem.getString(FOOD_DESC);
-                sveg = foodItem.getInt(FOOD_TYPE);
+                sveg = Integer.parseInt(foodItem.getString(FOOD_TYPE));
                 scategory = foodItem.getString(FOOD_CAT);
                 sspiciness = foodItem.getString(FOOD_SPICINESS);
                 sserves = foodItem.getString(FOOD_SERVES);
                 sbaseprice = foodItem.getString(FOOD_PRICE);
                 smainingredients = foodItem.getString(FOOD_INGREDIENTS);
-                savailable = foodItem.getInt(FOOD_AVAILABILITY);
+                savailable = Integer.parseInt(foodItem.getString(FOOD_AVAILABILITY));
                 simgurl = foodItem.getString(FOOD_IMAGE);
                 stime = foodItem.getString(FOOD_TIME);
                 scomments = foodItem.getString(FOOD_COMMENTS);
 
-
-//                pressure = dayForecast.getDouble(OWM_PRESSURE);
-//                humidity = dayForecast.getInt(OWM_HUMIDITY);
-//                windSpeed = dayForecast.getDouble(OWM_WINDSPEED);
-//                windDirection = dayForecast.getDouble(OWM_WIND_DIRECTION);
-//
-//                // Description is in a child array called "weather", which is 1 element long.
-//                // That element also contains a weather code.
-//                JSONObject weatherObject =
-//                        dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
-//                description = weatherObject.getString(OWM_DESCRIPTION);
-//                weatherId = weatherObject.getInt(OWM_WEATHER_ID);
-//
-//                // Temperatures are in a child object called "temp".  Try not to name variables
-//                // "temp" when working with temperature.  It confuses everybody.
-//                JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
-//                high = temperatureObject.getDouble(OWM_MAX);
-//                low = temperatureObject.getDouble(OWM_MIN);
 
                 ContentValues values = new ContentValues();
 
@@ -309,14 +240,7 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
                 Uri uri = FoodContract.FoodEntry.buildFoodUri();
                 getContext().getContentResolver().bulkInsert(uri, cvArray);
 
-                //Uri fooduri=getContext().getContentResolver().insert(uri, values);
-
-                // delete old data so we don't build up an endless history
-//                getContext().getContentResolver().delete(WeatherContract.WeatherEntry.CONTENT_URI,
-//                        WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?",
-//                        new String[] {Long.toString(dayTime.setJulianDay(julianStartDay-1))});
-
-                notifyFood(snames);
+                notifyFood(snames,count);
                 Log.d(LOG_TAG, "Sync Called Now");
 
             }
@@ -331,46 +255,9 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
 
     }
 
-    private void notifyFood(String names) {
+    private void notifyFood(String names,int count) {
         Context context = getContext();
-        //checking the last update and notify if it' the first of the day
-        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
-        boolean displayNotifications = prefs.getBoolean(displayNotificationsKey,
-                Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
-        */
-        //if ( displayNotifications ) {
 
-            //String lastNotificationKey = context.getString(R.string.pref_last_notification);
-            //long lastSync = prefs.getLong(lastNotificationKey, 0);
-
-            //if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
-                // Last sync was more than 1 day ago, let's send a notification with the weather.
-                //String locationQuery = Utility.getPreferredLocation(context);
-
-                //Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());
-
-                // we'll query our contentProvider, as always
-                //Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_WEATHER_PROJECTION, null, null, null);
-
-                /*if (cursor.moveToFirst()) {
-                    int weatherId = cursor.getInt(INDEX_WEATHER_ID);
-                    double high = cursor.getDouble(INDEX_MAX_TEMP);
-                    double low = cursor.getDouble(INDEX_MIN_TEMP);
-                    String desc = cursor.getString(INDEX_SHORT_DESC);
-
-                    int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
-
-                    Bitmap largeIcon = BitmapFactory.decodeResource(resources,
-                            Utility.getArtResourceForWeatherCondition(weatherId));
-                    String title = context.getString(R.string.app_name);
-
-                    // Define the text of the forecast.
-                    String contentText = String.format(context.getString(R.string.format_notification),
-                            desc,
-                            Utility.formatTemperature(context, high),
-                            Utility.formatTemperature(context, low));
-                */
                     // NotificationCompatBuilder is a very convenient way to build backward-compatible
                     // notifications.  Just throw in some data.
                     Resources resources = context.getResources();
@@ -381,7 +268,7 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
                                     .setSmallIcon(R.drawable.ic_launcher)
                                     //.setLargeIcon(R.drawable.ic_launcher)
                                     .setContentTitle(title)
-                                    .setContentText(names);
+                                    .setContentText(count+" "+names);
 
                     // Make something interesting happen when the user clicks on the notification.
                     // In this case, opening the app is sufficient.
@@ -402,16 +289,8 @@ public class FoodBasketSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     NotificationManager mNotificationManager =
                             (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    // WEATHER_NOTIFICATION_ID allows you to update the notification later on.
-                    mNotificationManager.notify(WEATHER_NOTIFICATION_ID, mBuilder.build());
 
-                    //refreshing last sync
-                    /*SharedPreferences.Editor editor = prefs.edit();
-                    editor.putLong(lastNotificationKey, System.currentTimeMillis());
-                    editor.commit();*/
-               // }
-                //cursor.close();
-            //}
+                    mNotificationManager.notify(WEATHER_NOTIFICATION_ID, mBuilder.build());
     }
 
 

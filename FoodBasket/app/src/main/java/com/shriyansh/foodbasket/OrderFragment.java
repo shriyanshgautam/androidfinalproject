@@ -43,9 +43,7 @@ public class OrderFragment extends Fragment implements LoaderManager.LoaderCallb
 
     SimpleCursorAdapter orderAdapter;
 
-    public void updateOrder(){
-        FoodBasketSyncAdapter.syncImmediately(getActivity());
-    }
+
 
 
     public interface Callback{
@@ -69,8 +67,6 @@ public class OrderFragment extends Fragment implements LoaderManager.LoaderCallb
         values.put(FoodContract.OrderEntry.COLUMN_TIMESTAMP,10.20);
         values.put(FoodContract.OrderEntry.COLUMN_ORDER_TAKEN_BY,"Shriyansh");
         //getActivity().getContentResolver().insert(FoodContract.OrderEntry.buildOrderUri(), values);
-
-        updateOrder();
     }
 
     @Override
