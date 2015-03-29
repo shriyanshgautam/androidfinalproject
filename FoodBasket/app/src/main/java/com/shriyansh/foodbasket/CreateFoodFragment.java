@@ -86,13 +86,31 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
 
         savedInstanceState.putString(FOOD_NAME,name.getText().toString());
         savedInstanceState.putString(FOOD_DESCRIPTION, description.getText().toString());
-        savedInstanceState.putInt(FOOD_SERVES, Integer.parseInt(serves.getText().toString()));
-        savedInstanceState.putDouble(FOOD_PRICE, Double.parseDouble(basePrice.getText().toString()));
+        if(!serves.getText().toString().contentEquals("")){
+            savedInstanceState.putInt(FOOD_SERVES, Integer.parseInt(serves.getText().toString()));
+        }else{
+            savedInstanceState.putInt(FOOD_SERVES,1);
+        }
+        if(!basePrice.getText().toString().contentEquals("")){
+            savedInstanceState.putDouble(FOOD_PRICE, Double.parseDouble(basePrice.getText().toString()));
+        }else{
+            savedInstanceState.putDouble(FOOD_PRICE,0);
+        }
         savedInstanceState.putString(FOOD_INGREDIENTS, mainIngredinets.getText().toString());
         savedInstanceState.putString(FOOD_COMMENT, comments.getText().toString());
         savedInstanceState.putString(FOOD_TIME,timetoprepare.getText().toString());
-        savedInstanceState.putInt(FOOD_CATEGORY,Integer.parseInt(scategory));
-        savedInstanceState.putInt(FOOD_SPICINESS, Integer.parseInt(sspiciness));
+
+        if(!scategory.contentEquals("")){
+            savedInstanceState.putInt(FOOD_CATEGORY,Integer.parseInt(scategory));
+        }else{
+            savedInstanceState.putInt(FOOD_CATEGORY,0);
+        }
+
+        if(!sspiciness.contentEquals("")){
+            savedInstanceState.putInt(FOOD_SPICINESS, Integer.parseInt(sspiciness));
+        }else{
+            savedInstanceState.putInt(FOOD_SPICINESS,1);
+        }
         savedInstanceState.putInt(FOOD_AVAILABLE, savailable);
         savedInstanceState.putInt(FOOD_VEG, sveg);
         savedInstanceState.putString(FOOD_IMG_URL, newImageUri.toString());
@@ -143,7 +161,6 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
                     e.printStackTrace();
                 }
                 foodImage.setImageBitmap(bitmap);
-
 
             }
 
