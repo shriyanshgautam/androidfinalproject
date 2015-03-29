@@ -1,6 +1,7 @@
 package com.shriyansh.foodbasket;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,18 +13,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import com.shriyansh.foodbasket.data.FoodContract;
 
-public class FoodActivity extends ActionBarActivity {
+
+public class FoodActivity extends ActionBarActivity implements FoodFragment.Callback{
+
+    boolean mTwoPane=false;
+    public static final String FOOD_DETAIL_FRAG_TAG="FDFT";
+    public static final String EXTRA_FOOD_ID="com.shriyansh.foodbasket.Foodactivity.EXTRA_FOOD_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order);
-        if (savedInstanceState == null) {
+        setContentView(R.layout.activity_food);
+        if(findViewById(R.id.food_container)!=null){
+
+            mTwoPane=true;
+
+            if(savedInstanceState==null){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.food_container,new FoodDetailFragment(),FOOD_DETAIL_FRAG_TAG)
+                        .commit();
+            }
+        }else{
+            mTwoPane=false;
+        }
+        /*if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new FoodFragment())
                     .commit();
-        }
+        }*/
     }
 
 
@@ -51,4 +70,24 @@ public class FoodActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    public void onItemSelected(long id) {
+
+        if(mTwoPane){
+            Bundle args=new Bundle();
+            args.putLong(FoodFragment.FOOD_ITEM_ID, id);
+            FoodDetailFragment foodDetailFragment=new FoodDetailFragment();
+            foodDetailFragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.food_container, foodDetailFragment, FOOD_DETAIL_FRAG_TAG)
+                    .commit();
+
+
+        }else{
+            //calling order detail from that time
+            Intent intent=new Intent(FoodActivity.this,FoodDetailActivity.class);
+            intent.putExtra(EXTRA_FOOD_ID,id);
+            startActivity(intent);
+        }
+    }
 }

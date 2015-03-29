@@ -23,9 +23,16 @@ public class OrderDetailActivity extends ActionBarActivity {
 
 
         if (savedInstanceState == null) {
+
+            Bundle args= new Bundle();
+            args.putString(OrderFragment.ORDER_TIME_URI,getIntent().getStringExtra(Intent.EXTRA_TEXT));
+            OrderDetailFragment orderDetailFragment=new OrderDetailFragment();
+            orderDetailFragment.setArguments(args);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new OrderDetailFragment())
+                    .add(R.id.order_container,orderDetailFragment)
                     .commit();
+
+
         }
     }
 

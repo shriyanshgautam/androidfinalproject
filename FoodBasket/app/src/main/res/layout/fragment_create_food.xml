@@ -33,7 +33,7 @@
                 android:layout_height="0dp"
                 android:gravity="center_vertical"
                 android:textSize="25dp"
-                android:hint="Name"
+                android:hint="Name*"
                 android:maxLines="2"
                 android:capitalize="words"
                 android:textColorHint="@color/white"
@@ -159,14 +159,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Serves"/>
+            android:hint="Serves*"/>
 
 
 
         <EditText
             android:id="@+id/createbaseprice"
             android:layout_width="match_parent"
-            android:hint="Base Price"
+            android:hint="Base Price*"
             android:inputType="numberDecimal"
             android:layout_height="wrap_content" />
         <EditText
@@ -186,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Time to prepare"
+            android:hint="Time to prepare*"
             />
 
 
@@ -195,18 +195,24 @@
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="45dp"
-           android:gravity="center"
+           android:gravity="left|center_vertical"
            android:background="@color/grey">
-           <TextView
+           <ImageView
                android:id="@+id/tvaddbutton"
-               android:layout_width="match_parent"
-               android:textColor="@color/white"
-               android:gravity="center"
-               android:textSize="35dp"
+               android:src="@drawable/ic_accept"
+               android:layout_marginLeft="5dp"
+               android:layout_marginRight="5dp"
+               android:layout_width="42dp"
+               android:layout_height="42dp" />
+           <ImageView
+               android:id="@+id/tvcreatenew"
+               android:src="@drawable/ic_action_new"
+               android:layout_marginLeft="5dp"
+               android:layout_marginRight="5dp"
+               android:visibility="invisible"
+               android:layout_width="42dp"
+               android:layout_height="42dp" />
 
-               android:text="+"
-
-               android:layout_height="wrap_content" />
 
            </LinearLayout>
 

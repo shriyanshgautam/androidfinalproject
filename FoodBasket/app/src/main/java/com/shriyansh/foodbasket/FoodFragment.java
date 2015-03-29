@@ -37,6 +37,14 @@ public class FoodFragment extends Fragment implements LoaderManager.LoaderCallba
     public static final int LOADER_ID=0;
 
     ImageView createfood;
+    public static String FOOD_ITEM_ID="food_item_id";
+    public int clickedItemPosition=0;
+    public static final String CLICKED_ITEM_KEY="clicked_item_key";
+    ListView listView;
+
+    public interface Callback{
+        public void onItemSelected(long id);
+    }
 
 
     SimpleCursorAdapter foodAdapter;
@@ -81,15 +89,20 @@ public class FoodFragment extends Fragment implements LoaderManager.LoaderCallba
                 if(view.getId() == R.id.foodimage){
                     String url=cursor.getString(columnIndex);
                     Uri newImageUri=Uri.parse(url);
-                    Log.d("IMGURI",newImageUri.toString());
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = MediaStore.Images.Media
-                                .getBitmap(getActivity().getContentResolver(), newImageUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if(newImageUri.toString().contentEquals("")){
+                        ((ImageView)view).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_picture));
+                    }else{
+                        Log.d("IMGURI",newImageUri.toString());
+                        Bitmap bitmap = null;
+                        try {
+                            bitmap = MediaStore.Images.Media
+                                    .getBitmap(getActivity().getContentResolver(), newImageUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        ((ImageView)view).setImageBitmap(bitmap);
                     }
-                    ((ImageView)view).setImageBitmap(bitmap);
+
                     return true; //true because the data was bound to the view
                 }else if(view.getId()==R.id.foodserves){
                     int serves=cursor.getInt(columnIndex);
@@ -112,18 +125,28 @@ public class FoodFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        ListView listView=(ListView)rootView.findViewById(R.id.foodlist);
+        listView=(ListView)rootView.findViewById(R.id.foodlist);
         listView.setAdapter(foodAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               // String forecast=foodAdapter.getItem(position);
+
+                ((Callback)getActivity()).onItemSelected(id);
+                clickedItemPosition=position;
+               /*
                 Intent intent=new Intent(getActivity(),FoodDetailActivity.class);
                 intent.putExtra(Intent.EXTRA_TEXT,id);
                 startActivity(intent);
+                */
             }
         });
+
+        //restoring the scroll if it contains a scroll
+        if(savedInstanceState!=null && savedInstanceState.containsKey(CLICKED_ITEM_KEY)){
+            clickedItemPosition=savedInstanceState.getInt(CLICKED_ITEM_KEY);
+        }
+
 
         return rootView;
     }
@@ -146,11 +169,22 @@ public class FoodFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         foodAdapter.swapCursor(data);
+        if(clickedItemPosition!=ListView.INVALID_POSITION){
+            listView.setSelection(clickedItemPosition);
+        }
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         foodAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if(clickedItemPosition!=ListView.INVALID_POSITION){
+            outState.putInt(CLICKED_ITEM_KEY,clickedItemPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
 }

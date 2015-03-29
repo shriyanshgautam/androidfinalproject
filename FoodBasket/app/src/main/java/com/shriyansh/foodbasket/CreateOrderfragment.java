@@ -63,6 +63,7 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
     public static final String CUSTOMER_NAME="com.shriyansh.foodbasket.CreateOrderActivity.CUSROMER_NAME";
     public static final String CUSTOMER_TABLE="com.shriyansh.foodbasket.CreateOrderActivity.CUSROMER_TABLE";
     public static final String CUSTOMER_COMMENT="com.shriyansh.foodbasket.CreateOrderActivity.CUSROMER_COMMENT";
+    public static final String IMAGE_URL="com.shriyansh.foodbasket.CreateOrderActivity.IMAGE_URL";
 
 
 
@@ -71,7 +72,7 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
     SimpleCursorAdapter orderFoodAdapter;
     Double totalPrice=0.0;
     TextView tvtotalprice,tvorderTime;
-    ImageView insertFoodItem,submitOrder;
+    ImageView insertFoodItem,submitOrder,createNewOrder;
     EditText etTableNumber,etName,etComment;
     ImageView foodImage;
     int tableNumber=0;
@@ -84,6 +85,7 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
     SharedPreferences myprefs;
     String orederTaker;
     double taxRate;
+    boolean submitted=false;
 
 
 
@@ -103,7 +105,7 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
         myprefs= PreferenceManager.getDefaultSharedPreferences(getActivity());
         orederTaker=myprefs.getString(getString(R.string.string_order_taken_by_key),getString(R.string.string_order_taken_by_default));
         taxRate=Double.valueOf(myprefs.getString(getString(R.string.string_tax_key),getString(R.string.string_tax_default)));
-        double showPrice=totalPrice+totalPrice*taxRate/100;
+        int showPrice=(int)(totalPrice+totalPrice*taxRate/100);
         tvtotalprice.setText("Rs. "+showPrice);
     }
 
@@ -120,6 +122,10 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
         }
 
         savedInstanceState.putString(CUSTOMER_COMMENT, etComment.getText().toString());
+        savedInstanceState.putString(IMAGE_URL,newImageUri.toString());
+
+
+
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -145,11 +151,28 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
         etComment=(EditText)rootView.findViewById(R.id.comment);
         tvorderTime=(TextView)rootView.findViewById(R.id.ordrtime);
         foodImage=(ImageView)rootView.findViewById(R.id.foodimage);
+        createNewOrder=(ImageView)rootView.findViewById(R.id.tvcreatenew);
 
         if(savedInstanceState!=null){
             etName.setText(savedInstanceState.getString(CUSTOMER_NAME));
             etTableNumber.setText(savedInstanceState.getInt(CUSTOMER_TABLE)+"");
             etComment.setText(savedInstanceState.getString(CUSTOMER_COMMENT));
+            Uri imgUri=Uri.parse(savedInstanceState.getString(IMAGE_URL));
+            newImageUri=imgUri;
+            if(newImageUri.toString().contentEquals("")){
+                foodImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_person));
+            }else{
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media
+                            .getBitmap(getActivity().getContentResolver(), imgUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                foodImage.setImageBitmap(bitmap);
+            }
+
+
         }
 
 
@@ -176,46 +199,81 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
         submitOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    tableNumber=Integer.parseInt(etTableNumber.getText().toString());
-                }catch (NumberFormatException e){
-                    tableNumber=0;
-                    Toast.makeText(getActivity(),"Table number not valid",Toast.LENGTH_SHORT).show();
-                }
 
-                customerName=etName.getText().toString();
-                Comment=etComment.getText().toString();
-                if(tableNumber==0 ||customerName.contentEquals("")){
-                    Toast.makeText(getActivity(),"Please check the fields",Toast.LENGTH_SHORT).show();
-                }else if(itemList.size()==0){
-                    Toast.makeText(getActivity(),"Please Add Food to your basket",Toast.LENGTH_SHORT).show();
-                }else if(newImageUri.toString().contentEquals("")){
-                    Toast.makeText(getActivity(),"Image not taken",Toast.LENGTH_SHORT).show();
+                if(submitted){
+                    toast("Order Already Added!");
                 }else{
 
-                    //insert
-                    Iterator itr=itemList.iterator();
-                    while (itr.hasNext()){
-                       OrderFoodItem item= (OrderFoodItem)itr.next();
-                        ContentValues values =new ContentValues();
-
-                        values.put(FoodContract.OrderEntry.COLUMN_CUSTOMER_NAME,customerName);
-                        values.put(FoodContract.OrderEntry.COLUMN_TABLE,tableNumber);
-                        values.put(FoodContract.OrderEntry.COLUMN_FOOD_ID,item.getFoodId());
-                        values.put(FoodContract.OrderEntry.COLUMN_FOOD_VARIANT_NAME,item.getFoodVariety());
-                        values.put(FoodContract.OrderEntry.COLUMN_QUANTITY,item.getQuantity());
-                        values.put(FoodContract.OrderEntry.COLUMN_IMG_URL,newImageUri.toString());
-                        values.put(FoodContract.OrderEntry.COLUMN__COMMENT,Comment);
-                        values.put(FoodContract.OrderEntry.COLUMN_TIMESTAMP,orderTime);
-                        values.put(FoodContract.OrderEntry.COLUMN_ORDER_TAKEN_BY,orederTaker);
-
-                        getActivity().getContentResolver().insert(FoodContract.OrderEntry.buildOrderUri(), values);
+                    try {
+                        tableNumber=Integer.parseInt(etTableNumber.getText().toString());
+                    }catch (NumberFormatException e){
+                        tableNumber=0;
+                        Toast.makeText(getActivity(),"Table number not valid!",Toast.LENGTH_SHORT).show();
                     }
 
-                  //go back
-                    getActivity().finish();
+                    customerName=etName.getText().toString();
+                    Comment=etComment.getText().toString();
+                    if(tableNumber==0 ||customerName.contentEquals("")){
+                        Toast.makeText(getActivity(),"Table Number and Customer Name cannot be empty!",Toast.LENGTH_SHORT).show();
+                    }else if(itemList.size()==0){
+                        Toast.makeText(getActivity(),"Please add Food to your basket!",Toast.LENGTH_SHORT).show();
+                    }/*else if(newImageUri.toString().contentEquals("")){
+                    Toast.makeText(getActivity(),"Image not taken",Toast.LENGTH_SHORT).show();
+                }*/else{
+
+                        //insert
+                        Iterator itr=itemList.iterator();
+                        while (itr.hasNext()){
+                            OrderFoodItem item= (OrderFoodItem)itr.next();
+                            ContentValues values =new ContentValues();
+
+                            values.put(FoodContract.OrderEntry.COLUMN_CUSTOMER_NAME,customerName);
+                            values.put(FoodContract.OrderEntry.COLUMN_TABLE,tableNumber);
+                            values.put(FoodContract.OrderEntry.COLUMN_FOOD_ID,item.getFoodId());
+                            values.put(FoodContract.OrderEntry.COLUMN_FOOD_VARIANT_NAME,item.getFoodVariety());
+                            values.put(FoodContract.OrderEntry.COLUMN_QUANTITY,item.getQuantity());
+                            values.put(FoodContract.OrderEntry.COLUMN_IMG_URL,newImageUri.toString());
+                            values.put(FoodContract.OrderEntry.COLUMN__COMMENT,Comment);
+                            values.put(FoodContract.OrderEntry.COLUMN_TIMESTAMP,orderTime);
+                            values.put(FoodContract.OrderEntry.COLUMN_ORDER_TAKEN_BY,orederTaker);
+
+                            getActivity().getContentResolver().insert(FoodContract.OrderEntry.buildOrderUri(), values);
+                        }
+
+
+                        toast("Order added Successfully!");
+                        //go back
+                        //getActivity().finish();
+                        submitOrder.setBackgroundColor(getResources().getColor(R.color.green));
+                        submitted=true;
+                        createNewOrder.setVisibility(View.VISIBLE);
+
+                    }
 
                 }
+
+            }
+        });
+
+        createNewOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                orderTime=getTimeString();
+                tvorderTime.setText(orderTime);
+                etName.setText("");
+                etTableNumber.setText("");
+                etComment.setText("");
+                newImageUri= Uri.parse("");
+                foodImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_person));
+                itemList.clear();;
+                adapter.notifyDataSetChanged();
+                submitted=false;
+                totalPrice=0d;
+                double showPrice=0;
+                submitOrder.setBackgroundColor(getResources().getColor(R.color.grey));
+                createNewOrder.setVisibility(View.INVISIBLE);
+                tvtotalprice.setText("Rs. "+showPrice);
+
             }
         });
 
@@ -243,7 +301,7 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
                 itemList.add(position,item);
                 adapter.notifyDataSetChanged();
                 totalPrice+=basePrice;
-                double showPrice=totalPrice+totalPrice*taxRate/100;
+                int showPrice=(int)(totalPrice+totalPrice*taxRate/100);
                 tvtotalprice.setText("Rs. "+showPrice);
 
             }
@@ -265,7 +323,7 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
                     itemList.add(position,item);
                     adapter.notifyDataSetChanged();
                     totalPrice-=basePrice;
-                    double showPrice=totalPrice+totalPrice*taxRate/100;
+                    int showPrice=(int)(totalPrice+totalPrice*taxRate/100);
                     tvtotalprice.setText("Rs. "+showPrice);
 
                 }else{
@@ -274,7 +332,7 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
 
                     adapter.notifyDataSetChanged();
                     totalPrice-=basePrice;
-                    double showPrice=totalPrice+totalPrice*taxRate/100;
+                    int showPrice=(int)(totalPrice+totalPrice*taxRate/100);
                     tvtotalprice.setText("Rs. "+showPrice);
 
                     return true;
@@ -333,12 +391,12 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
             //itemList.add(new OrderFoodItem(id,name,description,serve,veg,price,quantity,variety));
 
             if(checkExistence(id)){
-                Toast.makeText(getActivity(),"Item Already Exists",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Item Already Exists!",Toast.LENGTH_SHORT).show();
             }else{
                 adapter.add(new OrderFoodItem(id,name,description,serve,veg,price,quantity,variety,imgUrl));
                 adapter.notifyDataSetChanged();
                 totalPrice+=price;
-                double showPrice=totalPrice+totalPrice*taxRate/100;
+                int showPrice=(int)(totalPrice+totalPrice*taxRate/100);
                 tvtotalprice.setText("Rs. "+showPrice);
 
             }
@@ -489,6 +547,10 @@ public class CreateOrderfragment extends Fragment implements LoaderManager.Loade
         }
 
         return file;
+    }
+
+    public void toast(String msg){
+        Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
     }
 
 }

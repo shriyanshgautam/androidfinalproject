@@ -21,4 +21,6 @@
     <string name="string_tax_title">Tax Rate</string>
     <string name="string_tax_default">0</string>
 
+    <string name="sync_account_type">foodbasket.shriyansh.com</string>
+
 </resources>

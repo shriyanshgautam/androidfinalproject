@@ -20,6 +20,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
+                android:fontFamily="sans-serif-condensed"
                 android:textStyle="bold"
                 android:text="12:45 PM"
                 android:textSize="16dp"
@@ -45,6 +46,7 @@
                 android:textColor="@color/white"
                 android:text="99"
                 android:paddingRight="10dp"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center_vertical|left"
                 android:layout_height="match_parent" />
 
@@ -77,6 +79,7 @@
                     android:layout_weight="1"
                     android:paddingTop="8dp"
                     android:textSize="30dp"
+                    android:fontFamily="sans-serif-condensed"
                     android:textColor="@color/white"
                     android:text="Shriyansh Gautam"/>
                 <View
@@ -88,8 +91,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.9"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:textSize="12dp"
+                    android:fontFamily="sans-serif"
                     android:textStyle="italic"
                     android:paddingBottom="4dp"
                     android:text="\@ these are the comments  that user has written o describe "
@@ -144,7 +148,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:textColor="@color/white"
-
+            android:fontFamily="sans-serif"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:gravity="center_vertical|right"
@@ -159,11 +163,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.7"
                 android:textColor="@color/white"
-
+                android:fontFamily="sans-serif-condensed"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:gravity="right|center_vertical"
-                android:textSize="32dp"
+                android:textSize="30dp"
 
                 android:text="Rs 200"/>
 

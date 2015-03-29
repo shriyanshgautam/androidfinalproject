@@ -73,15 +73,20 @@ public class FoodOrderAdapter extends ArrayAdapter<OrderFoodItem> {
             viewHolder.tvPrice.setText("Rs. "+item.getFoodPrice());
 
             Uri newImageUri=Uri.parse(item.getFoodImgUrl());
-            Log.d("IMGURI", newImageUri.toString());
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media
-                        .getBitmap(context.getContentResolver(), newImageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(newImageUri.toString().contentEquals("")){
+                viewHolder.foodImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_picture));
+            }else{
+                Log.d("IMGURI", newImageUri.toString());
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media
+                            .getBitmap(context.getContentResolver(), newImageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                viewHolder.foodImage.setImageBitmap(bitmap);
             }
-            viewHolder.foodImage.setImageBitmap(bitmap);
+
             viewHolder.tvQuantity.setText(item.getQuantity()+"");
 
         }

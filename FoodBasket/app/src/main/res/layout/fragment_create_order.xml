@@ -49,6 +49,8 @@
                 android:inputType="number"
                 android:textColor="@color/white"
                 android:text=""
+                android:hint="*"
+                android:textColorHint="@color/white"
                 android:paddingRight="10dp"
                 android:gravity="center_vertical|left"
                 android:layout_height="match_parent" />
@@ -74,7 +76,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="4dp"
                 android:layout_height="match_parent">
                 <EditText
                     android:id="@+id/customername"
@@ -87,7 +89,7 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     android:selectAllOnFocus="true"
-                    android:hint="Customer Name"/>
+                    android:hint="Customer Name*"/>
 
                 <EditText
                     android:id="@+id/comment"
@@ -135,11 +137,19 @@
         >
         <ImageView
             android:id="@+id/submitOrder"
+            android:src="@drawable/ic_accept"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_width="42dp"
+
+            android:layout_height="42dp" />
+        <ImageView
+            android:id="@+id/tvcreatenew"
             android:src="@drawable/ic_action_new"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_width="42dp"
-            android:background="@color/green"
+            android:visibility="invisible"
             android:layout_height="42dp" />
         <TextView
             android:layout_width="0dp"
@@ -153,7 +163,7 @@
             android:textSize="15dp"
             android:textStyle="bold"
 
-            android:text="Total Amount\n(inclusive of teaxes)"/>
+            android:text="Total Amount\n(inclusive of taxes)"/>
 
         <TextView
             android:id="@+id/totalprice"
@@ -165,7 +175,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:gravity="right|center_vertical"
-            android:textSize="35dp"
+            android:textSize="30dp"
 
             android:text="Rs 200"/>
 

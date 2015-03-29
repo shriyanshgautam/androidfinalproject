@@ -66,6 +66,9 @@ public class FoodDetailFragment extends Fragment implements LoaderManager.Loader
     public static final int COL_IMG_URL=12;
 
 
+    public long ReceivedFoodItemId;
+
+
     SimpleCursorAdapter orderAdapter;
     TextView tvfname,tvfdescription,tvfcategory,tvfspiciness,tvfserves,tvfmainIngredients,tvfComments,tvfTime,tvfPrice;
     Switch swavailability,swveg;
@@ -82,6 +85,12 @@ public class FoodDetailFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        Bundle receivedArgs =getArguments();
+        if(receivedArgs!=null){
+            ReceivedFoodItemId=receivedArgs.getLong(FoodFragment.FOOD_ITEM_ID);
+        }
+
         View rootView=inflater.inflate(R.layout.fragment_food_detail,container,false);
         tvfname=(TextView)rootView.findViewById(R.id.foodname);
         tvfdescription=(TextView)rootView.findViewById(R.id.fooddesciption);
@@ -107,11 +116,15 @@ public class FoodDetailFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Intent intent=getActivity().getIntent();
-        Long orderId=intent.getLongExtra(Intent.EXTRA_TEXT,0);
-        Uri uri= FoodContract.FoodEntry.buildFoodWithIdUri(orderId);
-        Log.d("URI FOOD DETAIL", uri.toString());
+        /*Intent intent=getActivity().getIntent();
 
+        if(intent==null||intent.getData()==null){
+            return null;
+        }*/
+
+        //Long orderId=intent.getLongExtra(Intent.EXTRA_TEXT,0);
+        Uri uri= FoodContract.FoodEntry.buildFoodWithIdUri(ReceivedFoodItemId);
+        Log.d("URI FOOD DETAIL", uri.toString());
         return new CursorLoader(getActivity(),uri,projection,null,null,null);
     }
 
@@ -170,15 +183,20 @@ public class FoodDetailFragment extends Fragment implements LoaderManager.Loader
 
 
         Uri newImageUri=Uri.parse(imgurl);
-        Log.d("IMGURI",newImageUri.toString());
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media
-                    .getBitmap(getActivity().getContentResolver(), newImageUri);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(newImageUri.toString().contentEquals("")){
+            foodImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_picture));
+        }else{
+            Log.d("IMGURI",newImageUri.toString());
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(getActivity().getContentResolver(), newImageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            foodImage.setImageBitmap(bitmap);
         }
-        foodImage.setImageBitmap(bitmap);
+
     }
 
     @Override

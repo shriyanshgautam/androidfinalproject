@@ -1,0 +1,308 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.shriyansh.foodbasket.FoodDetailActivity$PlaceholderFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:background="@color/grey"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left">
+                <ImageView
+                    android:src="@drawable/ic_action_picture"
+                    android:id="@+id/foodimage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginLeft="18dp"
+                    android:padding="2dp"
+                    android:background="@color/light_grey"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="8dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/foodname"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:textSize="25dp"
+                    android:hint="Name"
+                    android:maxLines="2"
+                    android:capitalize="words"
+                    android:textColorHint="@color/white"
+                    android:textColor="@color/white"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/fooddesciption"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:textSize="12dp"
+                    android:maxLines="2"
+                    android:capitalize="words"
+                    android:paddingBottom="4dp"
+                    android:hint="Short description"
+                    android:textColorHint="@color/white"
+                    android:textColor="@color/white"
+                    android:layout_weight="0.6"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="350dp"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:orientation="vertical"
+                android:padding="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:gravity="center_vertical"
+                        android:text="Availability"/>
+
+                    <Switch
+                        android:id="@+id/switchavailability"
+                        android:layout_marginLeft="50dp"
+                        android:textOn="Available"
+                        android:gravity="center_vertical"
+                        android:textOff="Unavailable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:gravity="center_vertical"
+                        android:text="Vegetarian"/>
+
+                    <Switch
+                        android:id="@+id/switchveg"
+                        android:layout_marginLeft="50dp"
+                        android:textOn="VEG"
+                        android:textOff="NON VEG"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/foodmainingredients"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:text="Main Ingredients"
+                    android:textColor="@color/grey"
+                    android:textSize="18dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:gravity="center_vertical"
+                        android:text="Category"/>
+                    <TextView
+                        android:id="@+id/foodcategory"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="50dp"
+                        android:text="Starters"
+                        android:gravity="center_vertical"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/grey"
+                        android:layout_height="match_parent"/>
+
+
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:gravity="center_vertical"
+                        android:text="Spiciness"/>
+                    <TextView
+                        android:id="@+id/foodspiciness"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="50dp"
+                        android:text="Spicy"
+                        android:gravity="center_vertical"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/grey"
+                        android:layout_height="match_parent"/>
+
+
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:gravity="center_vertical"
+                        android:text="Serves"/>
+                    <TextView
+                        android:id="@+id/foodserves"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="50dp"
+                        android:text="2 Serves"
+                        android:gravity="center_vertical"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/grey"
+                        android:layout_height="match_parent"/>
+
+
+
+
+                </LinearLayout>
+
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:gravity="center_vertical"
+                        android:text="Preparation Time"/>
+                    <TextView
+                        android:id="@+id/foodtime"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="50dp"
+                        android:text="12 minutes"
+                        android:gravity="center_vertical"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/grey"
+                        android:layout_height="match_parent"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/foodcomments"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/grey"
+                    android:hint="Comments"
+                    />
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@color/grey">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:gravity="center_vertical|right"
+            android:textSize="15dp"
+            android:textStyle="bold"
+
+            android:text="Price\n(inclusive of teaxes)"/>
+
+        <TextView
+            android:id="@+id/foodprice"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/white"
+            android:gravity="center_vertical|left"
+            android:textSize="30dp"
+
+            android:text="Rs. 200"
+
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

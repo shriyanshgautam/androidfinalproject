@@ -90,15 +90,20 @@ public class SelectFoodFragment extends Fragment implements LoaderManager.Loader
                 if(view.getId() == R.id.foodimage){
                     String url=cursor.getString(columnIndex);
                     Uri newImageUri=Uri.parse(url);
-                    Log.d("IMGURI",newImageUri.toString());
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = MediaStore.Images.Media
-                                .getBitmap(getActivity().getContentResolver(), newImageUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if(newImageUri.toString().contentEquals("")){
+                        ((ImageView)view).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_picture));
+                    }else{
+                        Log.d("IMGURI",newImageUri.toString());
+                        Bitmap bitmap = null;
+                        try {
+                            bitmap = MediaStore.Images.Media
+                                    .getBitmap(getActivity().getContentResolver(), newImageUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        ((ImageView)view).setImageBitmap(bitmap);
                     }
-                    ((ImageView)view).setImageBitmap(bitmap);
+
                     return true; //true because the data was bound to the view
                 }else if(view.getId()==R.id.foodserves){
                     int serves=cursor.getInt(columnIndex);

@@ -20,9 +20,15 @@ public class FoodDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_detail);
         if (savedInstanceState == null) {
+
+            Bundle args= new Bundle();
+            args.putLong(FoodFragment.FOOD_ITEM_ID,getIntent().getLongExtra(FoodActivity.EXTRA_FOOD_ID,0));
+            FoodDetailFragment foodDetailFragment=new FoodDetailFragment();
+            foodDetailFragment.setArguments(args);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new FoodDetailFragment())
+                    .add(R.id.food_container,foodDetailFragment)
                     .commit();
+
         }
     }
 

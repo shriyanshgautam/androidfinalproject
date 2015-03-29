@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.shriyansh.foodbasket.data.FoodContract;
+import com.shriyansh.foodbasket.sync.FoodBasketSyncAdapter;
 
 import java.io.IOException;
 
@@ -35,9 +36,22 @@ public class OrderFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int LOADER_ID=1;
 
     ImageView takeOrder;
-
+    public static String ORDER_TIME_URI="order_time_uri";
+    int clickedItemPosition=0;
+    public static final String CLICKED_ITEM_KEY="clicked_item_key";
+    ListView listView;
 
     SimpleCursorAdapter orderAdapter;
+
+    public void updateOrder(){
+        FoodBasketSyncAdapter.syncImmediately(getActivity());
+    }
+
+
+    public interface Callback{
+        public void onItemSelected(Uri orderUri,long id);
+    }
+
     public OrderFragment() {
         // Required empty public constructor
     }
@@ -55,6 +69,8 @@ public class OrderFragment extends Fragment implements LoaderManager.LoaderCallb
         values.put(FoodContract.OrderEntry.COLUMN_TIMESTAMP,10.20);
         values.put(FoodContract.OrderEntry.COLUMN_ORDER_TAKEN_BY,"Shriyansh");
         //getActivity().getContentResolver().insert(FoodContract.OrderEntry.buildOrderUri(), values);
+
+        updateOrder();
     }
 
     @Override
@@ -79,15 +95,19 @@ public class OrderFragment extends Fragment implements LoaderManager.LoaderCallb
                 if(view.getId() == R.id.customerimage){
                     String url=cursor.getString(columnIndex);
                     Uri newImageUri=Uri.parse(url);
-                    Log.d("IMGURI",newImageUri.toString());
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = MediaStore.Images.Media
-                                .getBitmap(getActivity().getContentResolver(), newImageUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if(newImageUri.toString().contentEquals("")){
+                        ((ImageView)view).setImageDrawable(getResources().getDrawable(R.drawable.ic_action_person));
+                    }else{
+                        Log.d("IMGURI",newImageUri.toString());
+                        Bitmap bitmap = null;
+                        try {
+                            bitmap = MediaStore.Images.Media
+                                    .getBitmap(getActivity().getContentResolver(), newImageUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        ((ImageView)view).setImageBitmap(bitmap);
                     }
-                    ((ImageView)view).setImageBitmap(bitmap);
                     return true; //true because the data was bound to the view
                 }
                 return false;
@@ -98,13 +118,16 @@ public class OrderFragment extends Fragment implements LoaderManager.LoaderCallb
         curAdapter.setViewBinder(viewBinder);
         mNewsView.setAdapter(curAdapter);*/
 
-        ListView listView=(ListView)rootView.findViewById(R.id.list_order);
+        listView=(ListView)rootView.findViewById(R.id.list_order);
         listView.setAdapter(orderAdapter);
 
         takeOrder=(ImageView)rootView.findViewById(R.id.takeorder);
+
+
         takeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent=new Intent(getActivity(),CreateOrderActivity.class);
                 startActivity(intent);
             }
@@ -116,16 +139,23 @@ public class OrderFragment extends Fragment implements LoaderManager.LoaderCallb
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // String forecast=foodAdapter.getItem(position);
-                Intent intent=new Intent(getActivity(),OrderDetailActivity.class);
+                //bulding uri for order clicked
                 Uri uri= FoodContract.OrderEntry.buildOrderUriWithId(id);
                 Log.d("URI", uri.toString());
-                Cursor cursor=getActivity().getContentResolver().query(uri,new String[]{FoodContract.OrderEntry.COLUMN_TIMESTAMP}, FoodContract.OrderEntry._ID+" = ?",new String[]{String.valueOf(id)},null);
-                if(!cursor.moveToFirst()){return;}
-                String time=cursor.getString(cursor.getColumnIndex(FoodContract.OrderEntry.COLUMN_TIMESTAMP));
-                intent.putExtra(Intent.EXTRA_TEXT,time);
-                startActivity(intent);
+
+                ((Callback)getActivity()).onItemSelected(uri,id);
+                clickedItemPosition=position;
+
+
             }
         });
+
+        //restoring the scroll if it contains a scroll
+        if(savedInstanceState!=null && savedInstanceState.containsKey(CLICKED_ITEM_KEY)){
+            clickedItemPosition=savedInstanceState.getInt(CLICKED_ITEM_KEY);
+        }
+
+
         return rootView;
     }
 
@@ -133,6 +163,14 @@ public class OrderFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(LOADER_ID,null,this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if(clickedItemPosition!=ListView.INVALID_POSITION){
+            outState.putInt(CLICKED_ITEM_KEY,clickedItemPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
 
 
@@ -147,6 +185,9 @@ public class OrderFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         orderAdapter.swapCursor(data);
+        if(clickedItemPosition!=ListView.INVALID_POSITION){
+            listView.setSelection(clickedItemPosition);
+        }
 
     }
 

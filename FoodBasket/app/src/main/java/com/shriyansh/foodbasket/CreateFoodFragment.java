@@ -1,5 +1,6 @@
 package com.shriyansh.foodbasket;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
@@ -7,6 +8,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -46,9 +48,9 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
 
 
     EditText name,description,serves,basePrice,mainIngredinets,comments,timetoprepare;
-    TextView addbtn;
+    ImageView addbtn;
     Switch available,veg;
-    ImageView foodImage;
+    ImageView foodImage,createNewFood;
     Spinner spinnerCategory,spinnerSpiciness;
     private static int TAKE_PICTURE = 1;
     private Uri imageUri;
@@ -58,6 +60,7 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
 
     String sname,sdesc,scategory="0",sspiciness="0",sserves,sbaseprice,smainingredients,scomments,stime;
     int sveg,savailable;
+    boolean submitted=false;
 
     public static final String FOOD_NAME="com.shriyansh.foodbasket.CreateFoodActivity.FOOD_NAME";
     public static final String FOOD_DESCRIPTION="com.shriyansh.foodbasket.CreateFoodActivity.FOOD_DESCRIPTION";
@@ -71,6 +74,8 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
     public static final String FOOD_IMG_URL="com.shriyansh.foodbasket.CreateFoodActivity.FOOD_ING_URL";
     public static final String FOOD_AVAILABLE="com.shriyansh.foodbasket.CreateFoodActivity.FOOD_AVAILABLE";
     public static final String FOOD_VEG="com.shriyansh.foodbasket.CreateFoodActivity.FOOD_VEG";
+    public static final String FOOD_SUBMITTED="com.shriyansh.foodbasket.CreateFoodActivity.FOOD_SUBMITTED";
+
 
 
 
@@ -99,6 +104,7 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
         savedInstanceState.putString(FOOD_INGREDIENTS, mainIngredinets.getText().toString());
         savedInstanceState.putString(FOOD_COMMENT, comments.getText().toString());
         savedInstanceState.putString(FOOD_TIME,timetoprepare.getText().toString());
+        savedInstanceState.putString(FOOD_IMG_URL,newImageUri.toString());
 
         if(!scategory.contentEquals("")){
             savedInstanceState.putInt(FOOD_CATEGORY,Integer.parseInt(scategory));
@@ -114,6 +120,7 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
         savedInstanceState.putInt(FOOD_AVAILABLE, savailable);
         savedInstanceState.putInt(FOOD_VEG, sveg);
         savedInstanceState.putString(FOOD_IMG_URL, newImageUri.toString());
+        savedInstanceState.putBoolean(FOOD_SUBMITTED,submitted);
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -129,12 +136,13 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
         mainIngredinets=(EditText)rootView.findViewById(R.id.createmainingredients);
         comments=(EditText)rootView.findViewById(R.id.createcomments);
         timetoprepare=(EditText)rootView.findViewById(R.id.createtime);
-        addbtn=(TextView)rootView.findViewById(R.id.tvaddbutton);
+        addbtn=(ImageView)rootView.findViewById(R.id.tvaddbutton);
         available=(Switch)rootView.findViewById(R.id.createavailable);
         veg=(Switch)rootView.findViewById(R.id.createveg);
         foodImage=(ImageView)rootView.findViewById(R.id.foodimage);
         spinnerCategory=(Spinner)rootView.findViewById(R.id.spinnerCategory);
         spinnerSpiciness=(Spinner)rootView.findViewById(R.id.spinnerSpiciness);
+        createNewFood=(ImageView)rootView.findViewById(R.id.tvcreatenew);
 
         if(savedInstanceState!=null){
             name.setText(savedInstanceState.getString(FOOD_NAME));
@@ -148,21 +156,28 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
             spinnerSpiciness.setSelection(savedInstanceState.getInt(FOOD_SPICINESS));
             available.setChecked(savedInstanceState.getInt(FOOD_AVAILABLE, savailable) == 1);
             veg.setChecked(savedInstanceState.getInt(FOOD_VEG, sveg) == FoodContract.FoodEntry.VALUE_TYPE_VEG_VEGETARIAN);
-            if(savedInstanceState.getString(FOOD_IMG_URL).contentEquals("")){
-
+            submitted=savedInstanceState.getBoolean(FOOD_SUBMITTED);
+            if(submitted){
+                addbtn.setBackgroundColor(getResources().getColor(R.color.green));
+            }
+            Uri imgUri=Uri.parse(savedInstanceState.getString(FOOD_IMG_URL));
+            newImageUri=imgUri;
+            if(newImageUri.toString().contentEquals("")){
+                foodImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_picture));
             }else{
-                Uri newImageUri=Uri.parse(savedInstanceState.getString(FOOD_IMG_URL));
-                Log.d("IMGURI", newImageUri.toString());
                 Bitmap bitmap = null;
                 try {
                     bitmap = MediaStore.Images.Media
-                            .getBitmap(getActivity().getContentResolver(), newImageUri);
+                            .getBitmap(getActivity().getContentResolver(), imgUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 foodImage.setImageBitmap(bitmap);
-
             }
+
+
+
+
 
         }
 
@@ -239,39 +254,72 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sname=name.getText().toString();
-                sdesc=description.getText().toString();
-                sserves=serves.getText().toString();
-                sbaseprice=basePrice.getText().toString();
-                smainingredients=mainIngredinets.getText().toString();
-                scomments=comments.getText().toString();
-                stime=timetoprepare.getText().toString();
-                if (sname.contentEquals("") || sserves.contentEquals("")||sbaseprice.contentEquals("")||stime.contentEquals("")){
-                    Toast.makeText(getActivity(),"Pleasse Check the feilds",Toast.LENGTH_SHORT).show();
+
+                if(submitted){
+                    toast("Food Already Added!");
                 }else{
-                    //save
-                    ContentValues values =new ContentValues();
-                    Uri uri= FoodContract.FoodEntry.buildFoodUri();
-                    values.put(FoodContract.FoodEntry.COLUMN_FOOD_NAME,sname);
-                    values.put(FoodContract.FoodEntry.COLUMN_FOOD_DESCRIPTION,sdesc);
-                    values.put(FoodContract.FoodEntry.COLUMN_TYPE_VEG, sveg);
-                    values.put(FoodContract.FoodEntry.COLUMN_CATEGORY, Integer.valueOf(scategory));
-                    values.put(FoodContract.FoodEntry.COLUMN_TYPE_SPICINESS, Integer.valueOf(sspiciness));
-                    values.put(FoodContract.FoodEntry.COLUMN_SERVES, Integer.valueOf(sserves));
-                    values.put(FoodContract.FoodEntry.COLUMN_BASE_PRICE, Double.valueOf(sbaseprice));
-                    values.put(FoodContract.FoodEntry.COLUMN_MAIN_INGREDIENTS,smainingredients);
-                    values.put(FoodContract.FoodEntry.COLUMN_AVAILABILITY, savailable);
-                    values.put(FoodContract.FoodEntry.COLUMN_IMAGE_URL,newImageUri.toString());
-                    values.put(FoodContract.FoodEntry.COLUMN_TIME_TO_PREPARE, Double.valueOf(stime));
-                    values.put(FoodContract.FoodEntry.COLUMN_COMMENTS,scomments);
+                    sname=name.getText().toString();
+                    sdesc=description.getText().toString();
+                    sserves=serves.getText().toString();
+                    sbaseprice=basePrice.getText().toString();
+                    smainingredients=mainIngredinets.getText().toString();
+                    scomments=comments.getText().toString();
+                    stime=timetoprepare.getText().toString();
+                    if (sname.contentEquals("") || sserves.contentEquals("")||sbaseprice.contentEquals("")||stime.contentEquals("")){
+                        Toast.makeText(getActivity(),"Please fill the required details!",Toast.LENGTH_SHORT).show();
+                    }else{
+                        //save
+                        ContentValues values =new ContentValues();
+                        Uri uri= FoodContract.FoodEntry.buildFoodUri();
+                        values.put(FoodContract.FoodEntry.COLUMN_FOOD_NAME,sname);
+                        values.put(FoodContract.FoodEntry.COLUMN_FOOD_DESCRIPTION,sdesc);
+                        values.put(FoodContract.FoodEntry.COLUMN_TYPE_VEG, sveg);
+                        values.put(FoodContract.FoodEntry.COLUMN_CATEGORY, Integer.valueOf(scategory));
+                        values.put(FoodContract.FoodEntry.COLUMN_TYPE_SPICINESS, Integer.valueOf(sspiciness));
+                        values.put(FoodContract.FoodEntry.COLUMN_SERVES, Integer.valueOf(sserves));
+                        values.put(FoodContract.FoodEntry.COLUMN_BASE_PRICE, Double.valueOf(sbaseprice));
+                        values.put(FoodContract.FoodEntry.COLUMN_MAIN_INGREDIENTS,smainingredients);
+                        values.put(FoodContract.FoodEntry.COLUMN_AVAILABILITY, savailable);
+                        values.put(FoodContract.FoodEntry.COLUMN_IMAGE_URL,newImageUri.toString());
+                        values.put(FoodContract.FoodEntry.COLUMN_TIME_TO_PREPARE, Double.valueOf(stime));
+                        values.put(FoodContract.FoodEntry.COLUMN_COMMENTS,scomments);
 
-                    Uri fooduri=getActivity().getContentResolver().insert(uri, values);
-                    toast("Added Successfully : "+fooduri);
-                    getActivity().finish();
+                        Uri fooduri=getActivity().getContentResolver().insert(uri, values);
+                        toast("Added Successfully!");
 
+                        //getActivity().finish();
+                        addbtn.setBackgroundColor(getResources().getColor(R.color.green));
+                        submitted=true;
+                        createNewFood.setVisibility(View.VISIBLE);
+                    }
                 }
+
             }
         });
+
+        createNewFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                name.setText("");
+                description.setText("");
+                serves.setText("");
+                basePrice.setText("");
+                mainIngredinets.setText("");
+                comments.setText("");
+                timetoprepare.setText("");
+                spinnerCategory.setSelection(0);
+                spinnerSpiciness.setSelection(0);
+                available.setChecked(false);
+                veg.setChecked(false);
+                addbtn.setBackgroundColor(getResources().getColor(R.color.grey));
+                createNewFood.setVisibility(View.INVISIBLE);
+                foodImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_picture));
+                newImageUri=Uri.parse("");
+                submitted=false;
+
+            }
+        });
+
         return rootView;
     }
     @Override
@@ -415,4 +463,7 @@ public class CreateFoodFragment extends Fragment implements AdapterView.OnItemSe
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
+
 }

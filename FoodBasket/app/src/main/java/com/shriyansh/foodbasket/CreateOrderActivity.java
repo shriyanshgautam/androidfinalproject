@@ -14,8 +14,9 @@ public class CreateOrderActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_order);
         if (savedInstanceState == null) {
+
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new CreateOrderfragment())
+                    .add(R.id.order_container, new CreateOrderfragment())
                     .commit();
         }
     }

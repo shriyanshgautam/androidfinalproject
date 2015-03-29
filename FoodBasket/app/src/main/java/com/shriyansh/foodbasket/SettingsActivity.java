@@ -1,10 +1,14 @@
 package com.shriyansh.foodbasket;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 /**
  * Created by shriyansh on 16/3/15.
@@ -20,6 +24,8 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference(getString(R.string.string_tax_key)));
 
     }
+
+
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -70,5 +76,12 @@ public class SettingsActivity extends PreferenceActivity {
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 }

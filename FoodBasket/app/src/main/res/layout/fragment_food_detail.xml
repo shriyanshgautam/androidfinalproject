@@ -264,7 +264,7 @@
             android:textSize="15dp"
             android:textStyle="bold"
 
-            android:text="Total Amount\n(inclusive of teaxes)"/>
+            android:text="Price\n(inclusive of teaxes)"/>
 
         <TextView
             android:id="@+id/foodprice"
@@ -273,7 +273,7 @@
             android:layout_marginLeft="5dp"
             android:textColor="@color/white"
             android:gravity="center_vertical|left"
-            android:textSize="35dp"
+            android:textSize="30dp"
 
             android:text="Rs. 200"
 

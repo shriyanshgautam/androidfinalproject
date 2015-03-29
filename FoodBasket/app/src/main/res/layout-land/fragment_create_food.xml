@@ -1,0 +1,235 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.shriyansh.foodbasket.CreateFoodActivity$PlaceholderFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+
+            android:background="@color/grey">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:src="@drawable/ic_action_picture"
+                    android:id="@+id/foodimage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginLeft="18dp"
+                    android:padding="2dp"
+                    android:background="@color/light_grey"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/createname"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textSize="23dp"
+                    android:hint="Name"
+
+                    android:maxLines="2"
+                    android:capitalize="words"
+                    android:textColorHint="@color/white"
+                    android:textColor="@color/white"
+                    android:layout_weight="3"/>
+                <EditText
+                    android:id="@+id/createdesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textSize="12dp"
+                    android:maxLines="1"
+                    android:capitalize="words"
+                    android:hint="Short description"
+                    android:textColorHint="@color/white"
+                    android:textColor="@color/white"
+                    android:layout_weight="2"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+           >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal">
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+
+                        android:text="Availability"/>
+
+                    <Switch
+                        android:id="@+id/createavailable"
+                        android:layout_marginLeft="50dp"
+                        android:textOn="Available"
+                        android:textOff="Unavailable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+
+                        android:text="Vegetarian"/>
+
+                    <Switch
+                        android:id="@+id/createveg"
+                        android:layout_marginLeft="50dp"
+                        android:textOn="VEG"
+                        android:textOff="NON VEG"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+
+                        android:text="Category"/>
+                    <Spinner
+                        android:id="@+id/spinnerCategory"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="50dp"
+                        android:layout_height="35dp">
+
+                    </Spinner>
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+
+                        android:text="Spiciness"/>
+                    <Spinner
+                        android:id="@+id/spinnerSpiciness"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="50dp"
+                        android:layout_height="35dp">
+
+                    </Spinner>
+
+
+                </LinearLayout>
+
+
+
+
+
+                <EditText
+                    android:id="@+id/createserves"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="Serves"/>
+
+
+
+                <EditText
+                    android:id="@+id/createbaseprice"
+                    android:layout_width="match_parent"
+                    android:hint="Base Price"
+                    android:inputType="numberDecimal"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/createmainingredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Main Ingredients"
+                    android:minLines="2"/>
+                <EditText
+                    android:id="@+id/createcomments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Comments"
+                    />
+                <EditText
+                    android:id="@+id/createtime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:hint="Time to prepare"
+                    />
+
+
+            </LinearLayout>
+        </ScrollView>
+
+     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="left|center_vertical"
+        android:background="@color/grey">
+        <ImageView
+            android:id="@+id/tvaddbutton"
+            android:src="@drawable/ic_accept"
+
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_width="42dp"
+
+            android:layout_height="42dp" />
+        <ImageView
+            android:id="@+id/tvcreatenew"
+            android:src="@drawable/ic_action_new"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:visibility="invisible"
+            android:layout_width="42dp"
+            android:layout_height="42dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

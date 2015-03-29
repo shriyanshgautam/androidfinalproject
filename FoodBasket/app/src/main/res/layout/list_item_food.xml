@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
+    android:layout_height="match_parent"
+    android:background="@drawable/list_selector">
 
     <LinearLayout
         android:layout_width="80dp"
@@ -34,7 +36,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="36dp"
-
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center_vertical"
                 android:textSize="18dp"
                 android:textStyle="bold"
@@ -45,7 +47,7 @@
               android:id="@+id/quantityfood"
               android:layout_width="0dp"
               android:layout_height="36dp"
-              android:layout_weight="0.2"
+              android:layout_weight="0.3"
               android:text=""
               android:layout_marginRight="5dp"
               android:textSize="27dp"
@@ -61,7 +63,7 @@
                 android:id="@+id/fooddesciption"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
+                android:fontFamily="sans-serif"
                 android:textSize="10dp"
                 android:text="small description of the food item that it diplayed in this list and nothing else"/>
 
@@ -73,8 +75,8 @@
             android:layout_weight="1">
             <TextView
                 android:id="@+id/foodserves"
-                android:layout_width="80dp"
-
+                android:layout_width="wrap_content"
+                android:fontFamily="sans-serif-condensed"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
                 android:paddingBottom="4dp"
@@ -82,12 +84,14 @@
                 android:text="2 Serves"/>
             <TextView
                 android:id="@+id/foodveg"
-                android:layout_width="80dp"
-
+                android:layout_width="wrap_content"
+               android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:layout_height="match_parent"
                 android:gravity="bottom|center_horizontal"
                 android:textColor="@color/green"
                 android:paddingBottom="4dp"
+                android:fontFamily="sans-serif-condensed"
                 android:textSize="17dp"
                 android:text="NON VEG"/>
             <TextView
@@ -98,6 +102,7 @@
                 android:gravity="right|top"
                 android:paddingRight="8dp"
                 android:textStyle="normal"
+                android:fontFamily="sans-serif-condensed"
                 android:textSize="23dp"
                 android:text="Rs 125.3"/>
 
